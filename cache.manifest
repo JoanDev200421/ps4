@@ -1,21 +1,21 @@
 CACHE MANIFEST 
 
 CACHE: 
-cache.html
-index.html
-int64.js
-kexploit.js
-payload.js
-rop.js
-style.css
-webkit.js
-background.jpg
-parameter=/9._6.61 
-prototype/kernel
-ps vita pch1004/1104 prototype
-apollo PS vita prototype/
-12.15.22.2
-update   _21/04/2023
-line data/ 18/03/2021
-server soport 12/31/2050
-CPU_:ARMV7_ARMV8_UPDATE_SUP_PUP
+cache.html  in progress
+index.html  in progress
+int64.js   ok 
+kexploit.js   ok
+payload.js   ok
+rop.js      ok
+style.css    in progress
+webkit.js    ok 
+background.jpg    ok
+parameter=/9._6.61 ok
+prototype/kernel    ok
+ps vita pch1004/1104 prototype    ok
+apollo PS vita prototype/   ok
+12.15.22.2       in progress
+update   _21/04/2023   prototype
+line data/ 18/03/2021  prototype
+server soport 12/31/2050  prototype
+CPU_:ARMV7_ARMV8_UPDATE_SUP_PUP  prototype
